@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	timeout := 30*time.Second
+	timeout := 30 * time.Second
 
 	config := NewConfigFromEnv()
 	omeda := NewOmedaClient(config.BaseURL, timeout)
@@ -18,4 +18,3 @@ func main() {
 
 	fmt.Print(string(items))
 }
-

@@ -8,7 +8,7 @@ import (
 )
 
 type OmedaClient struct {
-	client *http.Client
+	client  *http.Client
 	baseURL string
 }
 
@@ -29,7 +29,7 @@ func (o *OmedaClient) Get(path string) ([]byte, error) {
 		return []byte{}, err
 	}
 	defer resp.Body.Close()
-	
+
 	if resp.StatusCode != http.StatusOK {
 		return []byte{}, fmt.Errorf("got non-ok status %v", resp.StatusCode)
 	}
@@ -41,4 +41,3 @@ func (o *OmedaClient) Get(path string) ([]byte, error) {
 
 	return body, nil
 }
-
