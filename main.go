@@ -10,11 +10,12 @@ func main() {
 
 	config := NewConfigFromEnv()
 	omeda := NewOmedaClient(config.BaseURL, timeout)
+	service := NewOmedaService(omeda)
 
-	items, err := omeda.Get("/items.json")
+	items, err := service.GetAllItems()
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Print(string(items))
+	fmt.Printf("%+v", items)
 }
