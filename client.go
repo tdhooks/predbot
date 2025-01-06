@@ -7,6 +7,8 @@ import (
 	"time"
 )
 
+var ErrNotFound = fmt.Errorf("not found")
+
 type OmedaClient struct {
 	client  *http.Client
 	baseURL string
@@ -31,7 +33,11 @@ func (o *OmedaClient) Get(path string) ([]byte, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return []byte{}, fmt.Errorf("got non-ok status %v", resp.StatusCode)
+		if resp.StatusCode == http.StatusNotFound {
+			return []byte{}, ErrNotFound
+		} else {
+			return []byte{}, fmt.Errorf("got status %v", resp.StatusCode)
+		}
 	}
 
 	body, err := io.ReadAll(resp.Body)

@@ -20,12 +20,38 @@ type Item struct {
 	HeroClass      string             `json:"hero_class"`
 	RequiredLevel  uint               `json:"required_level"`
 	Stats          map[string]float64 `json:"stats"`
-	Effects        EffectList         `json:"effects"`
+	Effects        []Effect           `json:"effects"`
 	Requirements   []string           `json:"requirements"`
 	BuildPaths     []string           `json:"build_paths"`
 }
 
-type EffectList []Effect
+type HeroList []Hero
+
+type Hero struct {
+	Id          uint                `json:"id"`
+	GameId      uint                `json:"game_id"`
+	Name        string              `json:"name"`
+	DisplayName string              `json:"display_name"`
+	Image       string              `json:"image"`
+	Stats       []uint              `json:"stats"`
+	Classes     []string            `json:"classes"`
+	Roles       []string            `json:"roles"`
+	Abilities   []Ability           `json:"abilities"`
+	BaseStats   map[string]HeroStat `json:"base_stats"`
+}
+
+// Hero stats are expressed as a list of values per level
+type HeroStat []float64
+
+type Ability struct {
+	DisplayName     string    `json:"display_name"`
+	Image           string    `json:"image"`
+	GameDescription string    `json:"game_description"`
+	MenuDescription string    `json:"menu_description"`
+	Cooldown        []float64 `json:"cooldown"`
+	Cost            []float64 `json:"cost"`
+	Key             string    `json:"key"`
+}
 
 type Effect struct {
 	Name            string `json:"name"`
@@ -61,6 +87,24 @@ func (o *OmedaService) GetItem(name string) (Item, error) {
 	err := o.fetchAndUnmarshal(path, &item)
 
 	return item, err
+}
+
+func (o *OmedaService) GetAllHeroes() (HeroList, error) {
+	path := "/heroes.json"
+	heroes := HeroList{}
+
+	err := o.fetchAndUnmarshal(path, &heroes)
+
+	return heroes, err
+}
+
+func (o *OmedaService) GetHero(name string) (Hero, error) {
+	path := fmt.Sprintf("/heroes/%s.json", name)
+	hero := Hero{}
+
+	err := o.fetchAndUnmarshal(path, &hero)
+
+	return hero, err
 }
 
 func (o *OmedaService) fetchAndUnmarshal(path string, model any) error {

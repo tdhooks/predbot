@@ -12,10 +12,10 @@ func main() {
 	omeda := NewOmedaClient(config.BaseURL, timeout)
 	service := NewOmedaService(omeda)
 
-	items, err := service.GetAllItems()
+	hero, err := service.GetHero("Aurora")
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Printf("%+v", items)
+	fmt.Printf("%+v", hero)
 }
